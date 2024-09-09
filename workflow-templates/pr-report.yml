@@ -1,0 +1,26 @@
+name: Quarkiverse post Test Report(s) to PR
+
+on:
+  workflow_run:
+    workflows:
+      - "build"
+    types:
+      - completed
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  checks: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  report:
+    name: Post Test report(s)
+    if: ${{ github.event.workflow_run.event == 'pull_request' }}
+    uses: quarkiverse/.github/.github/workflows/perform-post-comment.yml@main
