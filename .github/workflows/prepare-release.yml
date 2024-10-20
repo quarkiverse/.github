@@ -92,17 +92,11 @@ jobs:
           MAVEN_EXEC: ${{ inputs.maven_executable }}
 
       - name: Update latest release version in docs
-        if: ${{ hashFiles('docs/pom.xml') != '' || hashFiles('docs/antora.yml') }}
+        if: ${{ hashFiles('docs/pom.xml') != '' }}
         run: |
           $MAVEN_EXEC -B -ntp -pl docs -am package -DskipTests -DskipITs -Denforcer.skip -Dformatter.skip -Dimpsort.skip
-          if ! git diff --quiet docs/modules/ROOT/pages/includes; then
-            git add docs/modules/ROOT/pages/includes
-          fi
-          if ! git diff --quiet docs/antora.yml; then
-            git add docs/antora.yml
-          fi
-          if ! git diff --cached --quiet; then
-            git commit -m "Update the latest release version ${{env.CURRENT_VERSION}} in documentation"
+          if [[ `git status --porcelain` ]]; then
+            git commit -a -m "Update the latest release version ${{env.CURRENT_VERSION}} in documentation"
           fi
 
       - name: Bump .md files to ${{env.CURRENT_VERSION}}
