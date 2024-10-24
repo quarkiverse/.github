@@ -27,6 +27,11 @@ on:
         description: Is this the latest release? Unused if create_release is false
         type: boolean
         default: true
+      pre_release:
+        required: false
+        description: Is this a prerelease? Unused if create_release is false
+        type: boolean
+        default: false
     # Map the workflow outputs to job outputs
     outputs:
       release-version:
@@ -148,6 +153,6 @@ jobs:
 
       - name: Create GitHub Release
         if: ${{ inputs.create_release }}
-        run: gh release create ${CURRENT_VERSION} --generate-notes --draft=${{ inputs.draft_release }} --latest=${{ inputs.latest_release }}
+        run: gh release create ${CURRENT_VERSION} --generate-notes --draft=${{ inputs.draft_release }} --latest=${{ inputs.latest_release }} --prerelease=${{ inputs.pre_release }}
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
