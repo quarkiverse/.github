@@ -114,7 +114,7 @@ jobs:
 
       - name: Maven release ${{env.CURRENT_VERSION}}
         run: |
-          $MAVEN_EXEC -B release:prepare -Prelease -Dgpg.skip=true -DreleaseVersion=${CURRENT_VERSION} -DdevelopmentVersion=${NEXT_VERSION} -Darguments="-Dgpg.skip=true"
+          $MAVEN_EXEC -B release:prepare -Prelease -Dgpg.skip=true -DreleaseVersion=${CURRENT_VERSION} -DdevelopmentVersion=${NEXT_VERSION} -Darguments="-Dgpg.skip=true -DprepareRelease=true" -DprepareRelease=true
           $MAVEN_EXEC -B release:clean
 
       - name: Bump .md files to ${{env.NEXT_VERSION}}
