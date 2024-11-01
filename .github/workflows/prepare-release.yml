@@ -112,10 +112,26 @@ jobs:
             git commit -a -m "Bump .md files to ${{env.CURRENT_VERSION}}"
           fi
 
+      - name: Invoke Pre-Prepare Release Hook (if exists)
+        if: ${{ hashFiles('.github/pre-prepare-release.sh') != '' }}
+        run: ./.github/pre-prepare-release.sh
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          CURRENT_VERSION: ${{env.CURRENT_VERSION}}
+          NEXT_VERSION: ${{env.NEXT_VERSION}}
+
       - name: Maven release ${{env.CURRENT_VERSION}}
         run: |
           $MAVEN_EXEC -B release:prepare -Prelease -Dgpg.skip=true -DreleaseVersion=${CURRENT_VERSION} -DdevelopmentVersion=${NEXT_VERSION} -Darguments="-Dgpg.skip=true -DprepareRelease=true" -DprepareRelease=true
           $MAVEN_EXEC -B release:clean
+
+      - name: Invoke Post-Prepare Release Hook (if exists)
+        if: ${{ hashFiles('.github/post-prepare-release.sh') != '' }}
+        run: ./.github/post-prepare-release.sh
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          CURRENT_VERSION: ${{env.CURRENT_VERSION}}
+          NEXT_VERSION: ${{env.NEXT_VERSION}}
 
       - name: Bump .md files to ${{env.NEXT_VERSION}}
         run: |
