@@ -102,7 +102,7 @@ jobs:
           fi
 
       - name: Deploy release ${{env.RELEASE_VERSION}}
-        run: $MAVEN_EXEC deploy -DperformRelease -DaltDeploymentRepository=local::file://${{ github.workspace }}/repository -DskipTests -Denforcer.skip -Dformat.skip
+        run: $MAVEN_EXEC -B deploy -DperformRelease -DaltDeploymentRepository=local::file://${{ github.workspace }}/repository -DskipTests -Denforcer.skip -Dformat.skip
 
       - name: Tarball the artifacts
         run: tar -czvf ${ARTIFACT_PATH} -C repository .
