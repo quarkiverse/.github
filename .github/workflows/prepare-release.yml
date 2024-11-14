@@ -81,6 +81,9 @@ jobs:
           java-version: ${{inputs.java_version}}
           cache: 'maven'
 
+      - name: Setup JBang
+        uses: jbangdev/setup-jbang@main
+
       - name: Detect Maven Executable
         run: |
           if [[ -z "${MAVEN_EXEC}" ]]; then
