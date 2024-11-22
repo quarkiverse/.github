@@ -1,7 +1,0 @@
-reports:
-  - name: Unit Test
-    path: '**/target/surefire-reports/TEST*.xml'
-    artifact-pattern: test-report*
-  - name: Integration Test
-    path: '**/target/failsafe-reports/TEST*.xml'
-    artifact-pattern: test-report*
