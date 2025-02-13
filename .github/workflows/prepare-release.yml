@@ -14,9 +14,14 @@ on:
         default: 17
       create_release:
         required: false
-        description: Create Release ?
+        description: Create Release?
         type: boolean
         default: true
+      skip_tests:
+        required: false
+        description: Skip Tests?
+        type: boolean
+        default: false
     # Map the workflow outputs to job outputs
     outputs:
       release-version:
@@ -116,7 +121,7 @@ jobs:
 
       - name: Maven release ${{env.CURRENT_VERSION}}
         run: |
-          $MAVEN_EXEC -B release:prepare -Prelease -Dgpg.skip=true -DreleaseVersion=${CURRENT_VERSION} -DdevelopmentVersion=${NEXT_VERSION} -Darguments="-Dgpg.skip=true -DprepareRelease=true" -DprepareRelease=true
+          $MAVEN_EXEC -B release:prepare -Prelease -Dgpg.skip=true -DreleaseVersion=${CURRENT_VERSION} -DdevelopmentVersion=${NEXT_VERSION} ${{ inputs.skip_tests && '-DskipTests -DskipITs' || '' }} -Darguments="-Dgpg.skip=true -DprepareRelease=true ${{ inputs.skip_tests && '-DskipTests -DskipITs' || '' }}" -DprepareRelease=true
           $MAVEN_EXEC -B release:clean
 
       - name: Invoke Post-Prepare Release Hook (if exists)
