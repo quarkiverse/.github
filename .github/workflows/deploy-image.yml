@@ -46,7 +46,7 @@ jobs:
         with:
           subject-path: artifact.tar.gz
 
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@v2
         id: app-token
         name: Create GitHub App Token
         with:

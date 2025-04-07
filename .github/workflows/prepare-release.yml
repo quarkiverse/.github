@@ -44,7 +44,7 @@ jobs:
       next-version: ${{ steps.out.outputs.next-version }}
 
     steps:
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@v2
         id: app-token
         name: Create GitHub App Token
         with:
