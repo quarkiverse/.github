@@ -82,7 +82,7 @@ jobs:
           echo "ARTIFACT_PATH=${REPOSITORY_NAME}-${RELEASE_VERSION}.tar.gz" >> $GITHUB_ENV
         env:
           REPOSITORY_NAME: ${{ github.event.repository.name }}
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{env.REF}} # The tag created by the release:prepare goal
 
