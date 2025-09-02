@@ -109,7 +109,7 @@ jobs:
 
       - name: Generate artifact attestation
         id: attest_build_provenance
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: ${{env.ARTIFACT_PATH}}
 
