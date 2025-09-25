@@ -169,18 +169,3 @@ jobs:
           echo "- [${RELEASE_WORKFLOW_RUN_NAME}](${SUMMARY_URL})" >> $GITHUB_STEP_SUMMARY
         env:
           SUMMARY_URL: ${{ steps.out.outputs.release-workflow-url }}
-
-      - name: Wait for the release workflow to finish
-        run: |
-          gh run watch ${RELEASE_WORKFLOW_ID} -R quarkiverse/quarkiverse-release --exit-status
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          RELEASE_WORKFLOW_ID: ${{ steps.out.outputs.release-workflow-id }}
-
-      - name: Display release logs if failed
-        if: failure()
-        run: |
-          gh run view ${RELEASE_WORKFLOW_ID} -R quarkiverse/quarkiverse-release --log-failed
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          RELEASE_WORKFLOW_ID: ${{ steps.out.outputs.release-workflow-id }}
