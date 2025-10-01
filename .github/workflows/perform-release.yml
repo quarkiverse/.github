@@ -169,9 +169,13 @@ jobs:
           echo "- [${RELEASE_WORKFLOW_RUN_NAME}](${SUMMARY_URL})" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
           echo "Or use the [GitHub CLI](https://cli.github.com/) tool locally:" >> $GITHUB_STEP_SUMMARY
-          echo "- gh run watch ${RELEASE_WORKFLOW_ID} -R quarkiverse/quarkiverse-release" >> $GITHUB_STEP_SUMMARY
-          echo "To display the logs if the release failed:" >> $GITHUB_STEP_SUMMARY
-          echo "- gh run view ${RELEASE_WORKFLOW_ID} -R quarkiverse/quarkiverse-release --log-failed" >> $GITHUB_STEP_SUMMARY
+          echo "```bash" >> $GITHUB_STEP_SUMMARY
+          echo "gh run watch ${RELEASE_WORKFLOW_ID} -R quarkiverse/quarkiverse-release" >> $GITHUB_STEP_SUMMARY
+          echo "```" >> $GITHUB_STEP_SUMMARY          
+          echo "To display the logs if the release **failed**:" >> $GITHUB_STEP_SUMMARY
+          echo "```bash" >> $GITHUB_STEP_SUMMARY
+          echo "gh run view ${RELEASE_WORKFLOW_ID} -R quarkiverse/quarkiverse-release --log-failed" >> $GITHUB_STEP_SUMMARY
+          echo "```" >> $GITHUB_STEP_SUMMARY          
         env:
           SUMMARY_URL: ${{ steps.out.outputs.release-workflow-url }}
           RELEASE_WORKFLOW_ID: ${{ steps.out.outputs.release-workflow-id }}
