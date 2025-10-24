@@ -145,8 +145,9 @@ jobs:
 
       - name: Create GitHub Release
         if: ${{ inputs.create_release }}
-        run: gh release create ${CURRENT_VERSION} --generate-notes --latest=${LATEST_RELEASE} --prerelease=${PRE_RELEASE}
+        run: gh release create ${CURRENT_VERSION} --generate-notes --latest=${LATEST_RELEASE} --prerelease=${PRE_RELEASE} --notes="${ADDITIONAL_NOTES}"
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PRE_RELEASE: ${{ steps.metadata.outputs.pre-release == 'true' }}
           LATEST_RELEASE: ${{ !steps.metadata.outputs.latest || (steps.metadata.outputs.latest == 'true') }}
+          ADDITIONAL_NOTES: ${{ steps.metadata.outputs.additional-notes }}
