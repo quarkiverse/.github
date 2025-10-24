@@ -143,10 +143,27 @@ jobs:
           echo "release-version=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
           echo "next-version=${NEXT_VERSION}" >> $GITHUB_OUTPUT
 
+      - name: Read extension metadata
+        id: extension-metadata
+        run: |
+          EXTENSION_METADATA_PATH=runtime/target/classes/META-INF/quarkus-extension.yaml
+          if [[ -f "${EXTENSION_METADATA_PATH}" ]]; then
+            MIN_JAVA_VERSION=$(yq '.metadata.minimum-java-version' < ${EXTENSION_METADATA_PATH})
+            MIN_QUARKUS_VERSION=$(yq '.metadata.built-with-quarkus-core' < ${EXTENSION_METADATA_PATH})
+            echo "min-java-version=${MIN_JAVA_VERSION}" >> $GITHUB_OUTPUT
+            echo "min-quarkus-version=${MIN_QUARKUS_VERSION}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create GitHub Release
         if: ${{ inputs.create_release }}
-        run: gh release create ${CURRENT_VERSION} --generate-notes --latest=${LATEST_RELEASE} --prerelease=${PRE_RELEASE}
+        run: |
+          if [[ -n "${MIN_QUARKUS_VERSION}" && -n "${MIN_JAVA_VERSION}" ]]; then
+            MANUAL_NOTES="Requires Quarkus >= ${MIN_QUARKUS_VERSION} and Java >= ${MIN_JAVA_VERSION}"
+          fi
+          gh release create ${CURRENT_VERSION} --generate-notes --notes="${MANUAL_NOTES}" --latest=${LATEST_RELEASE} --prerelease=${PRE_RELEASE}
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PRE_RELEASE: ${{ steps.metadata.outputs.pre-release == 'true' }}
           LATEST_RELEASE: ${{ !steps.metadata.outputs.latest || (steps.metadata.outputs.latest == 'true') }}
+          MIN_JAVA_VERSION: ${{ steps.extension-metadata.outputs.min-java-version }}
+          MIN_QUARKUS_VERSION: ${{ steps.extension-metadata.outputs.min-quarkus-version }}
