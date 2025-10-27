@@ -114,7 +114,7 @@ jobs:
           subject-path: ${{env.ARTIFACT_PATH}}
 
       - name: Upload assets
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           path: ${{env.ARTIFACT_PATH}}
           retention-days: 3
