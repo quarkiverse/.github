@@ -22,8 +22,8 @@ on:
         description: Java Version
         type: number
         default: 17
-      wait_for_release:
-        description: 'Wait for the release to complete before returning'
+      watch_release_workflow:
+        description: 'Wait for the release workflow to complete before returning'
         required: false
         type: boolean
         default: false
@@ -44,8 +44,8 @@ on:
         required: false
         type: boolean
         default: false
-      wait_for_release:
-        description: 'Wait for the release to complete before returning'
+      watch_release_workflow:
+        description: 'Wait for the release workflow to complete before returning'
         required: false
         type: boolean
         default: false
@@ -191,7 +191,7 @@ jobs:
           RELEASE_WORKFLOW_ID: ${{ steps.out.outputs.release-workflow-id }}
 
       - name: Wait for the release workflow to finish
-        if: ${{ inputs.wait_for_release || github.event.inputs.wait_for_release }}
+        if: ${{ inputs.watch_release_workflow || github.event.inputs.watch_release_workflow }}
         run: gh run watch ${RELEASE_WORKFLOW_ID} -R quarkiverse/quarkiverse-release --exit-status
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
