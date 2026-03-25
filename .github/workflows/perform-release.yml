@@ -138,38 +138,23 @@ jobs:
           repositories: quarkiverse-release
 
       - name: Invoke Quarkiverse Release workflow
+        id: out
         run: |
-          gh workflow run deploy-artifacts.yml -R quarkiverse/quarkiverse-release \
+          RELEASE_WORKFLOW_URL=$(gh workflow run deploy-artifacts.yml -R quarkiverse/quarkiverse-release \
             -f github_repository=${GH_REPO} \
             -f run_id=${GH_RUN_ID} \
             -f version=${RELEASE_VERSION} \
             -f name=${ARTIFACT_NAME} \
-            -f dry_run=${DRY_RUN}
-
+            -f dry_run=${DRY_RUN})
+          RELEASE_WORKFLOW_ID=$(basename "$RELEASE_WORKFLOW_URL")
+          echo "release-workflow-id=$RELEASE_WORKFLOW_ID" >> $GITHUB_OUTPUT
+          echo "release-workflow-url=$RELEASE_WORKFLOW_URL" >> $GITHUB_OUTPUT
           echo "RELEASE_WORKFLOW_RUN_NAME=Deploy ${ARTIFACT_NAME} ${RELEASE_VERSION} to Central" >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           GH_REPO: ${{ github.repository }}
           GH_RUN_ID: ${{ github.run_id }}
           ARTIFACT_NAME: ${{ github.event.repository.name }}
-
-      - name: Output release version
-        id: out
-        run: |
-          # Wait for the deploy-artifacts.yml workflow to start
-          sleep 10
-          # Get the URL of the release workflow (MUST match the workflow's run-name)
-          RELEASE_WORKFLOW_DATA=$(gh run list --workflow deploy-artifacts.yml -R quarkiverse/quarkiverse-release --json databaseId,name,url -q ".[] | select(.name == \"${RELEASE_WORKFLOW_RUN_NAME}\")" --limit 1)
-          if [ -z "$RELEASE_WORKFLOW_DATA" ]; then
-            echo "Failed to find the release workflow. Please check https://github.com/quarkiverse/quarkiverse-release/actions for a workflow named '${RELEASE_WORKFLOW_RUN_NAME}'"
-            exit 1
-          fi
-          RELEASE_WORKFLOW_ID=$(jq -r '.databaseId' <<< $RELEASE_WORKFLOW_DATA)
-          RELEASE_WORKFLOW_URL=$(jq -r '.url' <<< $RELEASE_WORKFLOW_DATA)
-          echo "release-workflow-id=$RELEASE_WORKFLOW_ID" >> $GITHUB_OUTPUT
-          echo "release-workflow-url=$RELEASE_WORKFLOW_URL" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Report Job Summary
         run: |
