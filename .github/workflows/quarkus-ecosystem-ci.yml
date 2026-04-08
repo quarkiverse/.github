@@ -11,6 +11,14 @@ on:
         description: "Java version to use for the build, e.g. 17 or 21. By default, Java 17 will be used."
         type: number
         default: 17
+      quarkus_version_pom_path:
+        required: false
+        description: "Path to the POM file where the Quarkus version is defined, relative to the repository root. By default, it's set to 'rest-fights/pom.xml'."
+        type: string
+      quarkus_version_pom_property:
+        required: false
+        description: "Name of the property in the POM file that defines the Quarkus version. By default, it's set to 'quarkus.platform.version'."
+        type: string
 
   # For this CI to work, ECOSYSTEM_CI_TOKEN needs to contain a GitHub with rights to close the Quarkus issue that the user/bot has opened,
   # while 'ECOSYSTEM_CI_REPO_PATH' needs to be set to the corresponding path in the 'quarkusio/quarkus-ecosystem-ci' repository
@@ -25,6 +33,8 @@ env:
   #########################
 
   ECOSYSTEM_CI_REPO_PATH: ${{ inputs.ecosystem_ci_repo_path}}
+  QUARKUS_VERSION_POM_PATH: ${{ inputs.quarkus_version_pom_path }}
+  QUARKUS_VERSION_POM_PROPERTY: ${{ inputs.quarkus_version_pom_property }}
 
 permissions:
   contents: read
@@ -60,3 +70,5 @@ jobs:
         run: ./ecosystem-ci/setup-and-test
         env:
           ECOSYSTEM_CI_TOKEN: ${{ secrets.ECOSYSTEM_CI_TOKEN }}
+          QUARKUS_VERSION_POM_PATH: ${{ env.QUARKUS_VERSION_POM_PATH }}
+          QUARKUS_VERSION_POM_PROPERTY: ${{ env.QUARKUS_VERSION_POM_PROPERTY }}
