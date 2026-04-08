@@ -9,6 +9,12 @@ jobs:
     name: pre release
 
     steps:
+      - name: Check if PR is from a fork
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo '::error::Pre-release cannot be triggered from a fork.'
+          exit 1
+
       - uses: radcortez/project-metadata-action@main
         name: retrieve project metadata
         id: metadata
