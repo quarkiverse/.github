@@ -66,9 +66,21 @@ jobs:
           repository: ${{ env.ECOSYSTEM_CI_REPO }}
           path: ecosystem-ci
 
+      - name: Invoke Pre Ecosystem Hook (if exists)
+        if: ${{ hashFiles('./current-repo/.github/workflows/hooks/pre-quarkus-ecosystem-ci.sh') != '' }}
+        run: ./current-repo/.github/workflows/hooks/pre-quarkus-ecosystem-ci.sh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Setup and Run Tests
         run: ./ecosystem-ci/setup-and-test
         env:
           ECOSYSTEM_CI_TOKEN: ${{ secrets.ECOSYSTEM_CI_TOKEN }}
           QUARKUS_VERSION_POM_PATH: ${{ env.QUARKUS_VERSION_POM_PATH }}
           QUARKUS_VERSION_POM_PROPERTY: ${{ env.QUARKUS_VERSION_POM_PROPERTY }}
+
+      - name: Invoke Post Ecosystem Hook (if exists)
+        if: ${{ hashFiles('./current-repo/.github/workflows/hooks/post-quarkus-ecosystem-ci.sh') != '' }}
+        run: ./current-repo/.github/workflows/hooks/post-quarkus-ecosystem-ci.sh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
