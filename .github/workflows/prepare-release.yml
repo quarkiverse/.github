@@ -48,7 +48,7 @@ jobs:
         id: app-token
         name: Create GitHub App Token
         with:
-          app-id: ${{ vars.CI_APP_ID }}
+          client-id: ${{ vars.CI_APP_CLIENT_ID }}
           private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@v6
