@@ -18,12 +18,15 @@ jobs:
           echo '::error::Pre-release cannot be triggered from a fork.'
           exit 1
 
+      - uses: actions/checkout@v6
+      
       - uses: radcortez/project-metadata-action@main
         name: retrieve project metadata
         id: metadata
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           metadata-file-path: '.github/project.yml'
+          local-file: true
 
       - name: Validate version
         if: contains(steps.metadata.outputs.current-version, 'SNAPSHOT')
