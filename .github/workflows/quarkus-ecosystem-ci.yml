@@ -11,6 +11,11 @@ on:
         description: "The repository that contains the Ecosystem CI configuration. By default, it's set to 'quarkusio/quarkus-ecosystem-ci'."
         type: string
         default: "quarkusio/quarkus-ecosystem-ci"
+      ecosystem_ci_repo_branch:
+        required: false
+        description: "The branch of the Ecosystem CI repository to use. By default, it's set to 'main'."
+        type: string
+        default: "main"
       java_version:
         required: false
         description: "Java version to use for the build, e.g. 17 or 21. By default, Java 17 will be used."
@@ -69,6 +74,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: ${{ env.ECOSYSTEM_CI_REPO }}
+          ref: ${{ inputs.ecosystem_ci_repo_branch }}
           path: ecosystem-ci
 
       - name: Invoke Pre Ecosystem Hook (if exists)
