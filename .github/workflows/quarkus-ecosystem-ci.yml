@@ -6,6 +6,11 @@ on:
         required: true
         description: "Path to the ecosystem CI configuration file in the quarkusio/quarkus-ecosystem-ci repository, e.g. 'quarkiverse-ironjacamar/context.yaml'"
         type: string
+      ecosystem_ci_repo:
+        required: false
+        description: "The repository that contains the Ecosystem CI configuration. By default, it's set to 'quarkusio/quarkus-ecosystem-ci'."
+        type: string
+        default: "quarkusio/quarkus-ecosystem-ci"
       java_version:
         required: false
         description: "Java version to use for the build, e.g. 17 or 21. By default, Java 17 will be used."
@@ -24,7 +29,7 @@ on:
   # while 'ECOSYSTEM_CI_REPO_PATH' needs to be set to the corresponding path in the 'quarkusio/quarkus-ecosystem-ci' repository
 
 env:
-  ECOSYSTEM_CI_REPO: quarkusio/quarkus-ecosystem-ci
+  ECOSYSTEM_CI_REPO: ${{ inputs.ecosystem_ci_repo }}
   ECOSYSTEM_CI_REPO_FILE: context.yaml
   JAVA_VERSION: ${{ inputs.java_version }}
 
