@@ -77,9 +77,6 @@ jobs:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Setup JBang
-        uses: jbangdev/setup-jbang@main
-
       - name: Invoke Pre Ecosystem Hook (if exists)
         if: ${{ hashFiles('./current-repo/.github/workflows/hooks/pre-quarkus-ecosystem-ci.sh') != '' }}
         run: ./current-repo/.github/workflows/hooks/pre-quarkus-ecosystem-ci.sh
