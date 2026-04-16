@@ -59,12 +59,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: ${{ env.JAVA_VERSION }}
-
       - name: Checkout repo
         uses: actions/checkout@v6
         with:
@@ -76,6 +70,12 @@ jobs:
           repository: ${{ env.ECOSYSTEM_CI_REPO }}
           ref: ${{ inputs.ecosystem_ci_repo_branch }}
           path: ecosystem-ci
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
 
       - name: Invoke Pre Ecosystem Hook (if exists)
         if: ${{ hashFiles('./current-repo/.github/workflows/hooks/pre-quarkus-ecosystem-ci.sh') != '' }}
