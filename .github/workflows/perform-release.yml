@@ -27,6 +27,10 @@ on:
         required: false
         type: boolean
         default: false
+      maven_args:
+        description: 'Additional Maven arguments to pass to the release command'
+        required: false
+        type: string
 
   # Can be triggered manually also
   workflow_dispatch:
@@ -49,6 +53,10 @@ on:
         required: false
         type: boolean
         default: false
+      maven_args:
+        description: 'Additional Maven arguments to pass to the release command'
+        required: false
+        type: string
 
 permissions:
   attestations: write
@@ -113,6 +121,8 @@ jobs:
 
       - name: Deploy release ${{env.RELEASE_VERSION}}
         run: $MAVEN_EXEC -B deploy -DperformRelease -DaltDeploymentRepository=local::file://${{ github.workspace }}/repository -DskipTests -DskipITs -Denforcer.skip -Dformat.skip
+        env:
+          MAVEN_ARGS: ${{ inputs.maven_args || github.event.inputs.maven_args }}
 
       - name: Tarball the artifacts
         run: tar -czvf ${ARTIFACT_PATH} -C repository .
