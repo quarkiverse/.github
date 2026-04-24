@@ -119,10 +119,22 @@ jobs:
             echo "MAVEN_EXEC=mvn" >> $GITHUB_ENV
           fi
 
+      - name: Invoke Pre-Perform Release Hook (if exists)
+        if: ${{ hashFiles('.github/workflows/hooks/pre-perform-release.sh') != '' }}
+        run: ./.github/workflows/hooks/pre-perform-release.sh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Deploy release ${{env.RELEASE_VERSION}}
         run: $MAVEN_EXEC -B deploy -DperformRelease -DaltDeploymentRepository=local::file://${{ github.workspace }}/repository -DskipTests -DskipITs -Denforcer.skip -Dformat.skip
         env:
           MAVEN_ARGS: ${{ inputs.maven_args || github.event.inputs.maven_args }}
+
+      - name: Invoke Post-Perform Release Hook (if exists)
+        if: ${{ hashFiles('.github/workflows/hooks/post-perform-release.sh') != '' }}
+        run: ./.github/workflows/hooks/post-perform-release.sh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Tarball the artifacts
         run: tar -czvf ${ARTIFACT_PATH} -C repository .
