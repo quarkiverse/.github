@@ -17,6 +17,11 @@ on:
         description: Create Release?
         type: boolean
         default: true
+      create_milestone:
+        required: false
+        description: Create Milestone?
+        type: boolean
+        default: false
       skip_tests:
         required: false
         description: Skip Tests?
@@ -143,11 +148,20 @@ jobs:
           echo "release-version=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
           echo "next-version=${NEXT_VERSION}" >> $GITHUB_OUTPUT
 
+
       - name: Create GitHub Release
-        if: ${{ inputs.create_release }}
+        if: ${{ inputs.create_release && !inputs.create_milestone}}
         run: gh release create ${CURRENT_VERSION} --generate-notes --latest=${LATEST_RELEASE} --prerelease=${PRE_RELEASE} --notes="${ADDITIONAL_NOTES}"
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PRE_RELEASE: ${{ steps.metadata.outputs.pre-release == 'true' }}
           LATEST_RELEASE: ${{ !steps.metadata.outputs.latest || (steps.metadata.outputs.latest == 'true') }}
           ADDITIONAL_NOTES: ${{ steps.metadata.outputs.additional-notes }}
+
+      - uses: radcortez/milestone-release-action@main
+        name: Create Milestone and GitHub Release
+        if: ${{ inputs.create_release && inputs.create_milestone}}
+        with:
+          github-token: ${{steps.app-token.outputs.token}}
+          milestone-title: ${{steps.metadata.outputs.current-version}}
+          milestone-next: ${{steps.metadata.outputs.next-version}}
