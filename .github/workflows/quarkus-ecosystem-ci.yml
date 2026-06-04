@@ -89,8 +89,8 @@ jobs:
             ${{ runner.os }}-maven-wrapper-
 
       - name: Invoke Pre Ecosystem Hook (if exists)
-        if: ${{ hashFiles('./current-repo/.github/workflows/hooks/pre-quarkus-ecosystem-ci.sh') != '' }}
-        run: ./current-repo/.github/workflows/hooks/pre-quarkus-ecosystem-ci.sh
+        if: ${{ hashFiles('./ecosystem-ci/.github/workflows/hooks/pre-quarkus-ecosystem-ci.sh') != '' }}
+        run: ./ecosystem-ci/.github/workflows/hooks/pre-quarkus-ecosystem-ci.sh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -104,7 +104,7 @@ jobs:
           ALTERNATIVE: ${{ env.ALTERNATIVE }}
 
       - name: Invoke Post Ecosystem Hook (if exists)
-        if: ${{ hashFiles('./current-repo/.github/workflows/hooks/post-quarkus-ecosystem-ci.sh') != '' }}
-        run: ./current-repo/.github/workflows/hooks/post-quarkus-ecosystem-ci.sh
+        if: ${{ hashFiles('./ecosystem-ci/.github/workflows/hooks/post-quarkus-ecosystem-ci.sh') != '' }}
+        run: ./ecosystem-ci/.github/workflows/hooks/post-quarkus-ecosystem-ci.sh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
