@@ -100,7 +100,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Invoke Post Ecosystem Hook (if exists)
-        if: ${{ hashFiles('./current-repo/.github/workflows/hooks/post-quarkus-ecosystem-ci.sh') != '' }}
-        run: ./current-repo/.github/workflows/hooks/post-quarkus-ecosystem-ci.sh
+        if: ${{ hashFiles('./ecosystem-ci/.github/workflows/hooks/post-quarkus-ecosystem-ci.sh') != '' }}
+        run: ./ecosystem-ci/.github/workflows/hooks/post-quarkus-ecosystem-ci.sh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
