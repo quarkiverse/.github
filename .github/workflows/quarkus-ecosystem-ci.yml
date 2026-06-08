@@ -71,11 +71,12 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: 'quarkiverse/.github'
+          sparse-checkout: .github/shared
           path: dot-github
 
       - name: Reclaim Disk Space
         working-directory: dot-github
-        run: .github/ci-prerequisites.sh
+        run: .github/shared/ci-prerequisites.sh
 
       - name: Checkout Ecosystem
         uses: actions/checkout@v6
