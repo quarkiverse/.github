@@ -67,8 +67,14 @@ jobs:
         with:
           path: current-repo
 
+      - name: Checkout quarkiverse/.github repo
+        uses: actions/checkout@v6
+        with:
+          repository: 'quarkiverse/.github'
+          path: dot-github
+
       - name: Reclaim Disk Space
-        working-directory: current-repo
+        working-directory: dot-github
         run: .github/ci-prerequisites.sh
 
       - name: Checkout Ecosystem
