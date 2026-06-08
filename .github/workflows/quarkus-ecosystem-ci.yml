@@ -67,6 +67,10 @@ jobs:
         with:
           path: current-repo
 
+      - name: Reclaim Disk Space
+        working-directory: current-repo
+        run: .github/ci-prerequisites.sh
+
       - name: Checkout Ecosystem
         uses: actions/checkout@v6
         with:
