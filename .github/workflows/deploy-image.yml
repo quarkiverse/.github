@@ -11,10 +11,16 @@ on:
         required: true
         description: Image Version
         type: string
+      artifact_name:
+        description: 'Name of the artifact to download (default: artifact)'
+        required: false
+        type: string
+        default: 'artifact'
 
 env:
   PAYLOAD_IMAGE_NAME: ${{ inputs.image_name }}
   PAYLOAD_IMAGE_TAG: ${{ inputs.image_tag }}
+  PAYLOAD_IMAGE_ARTIFACT: ${{ inputs.artifact_name }}
   PAYLOAD_REPOSITORY: ${{ github.repository }}
 
 permissions:
@@ -35,7 +41,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v8
         with:
-          name: artifact
+          name: ${{ env.PAYLOAD_IMAGE_ARTIFACT }}
           repository: ${{ env.PAYLOAD_REPOSITORY }}
           run-id: ${{ github.run_id}}
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +50,7 @@ jobs:
         id: attest_build_provenance
         uses: actions/attest-build-provenance@v4
         with:
-          subject-path: artifact.tar.gz
+          subject-path: ${{ env.PAYLOAD_IMAGE_ARTIFACT }}.tar.gz
 
       - uses: actions/create-github-app-token@v3
         id: app-token
