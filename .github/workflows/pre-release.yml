@@ -18,7 +18,7 @@ jobs:
           echo '::error::Pre-release cannot be triggered from a fork.'
           exit 1
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       
       - uses: smallrye/project-metadata-action@main
         name: retrieve project metadata

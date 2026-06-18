@@ -63,12 +63,12 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: current-repo
 
       - name: Checkout quarkiverse/.github repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: 'quarkiverse/.github'
           sparse-checkout: .github/shared
@@ -79,7 +79,7 @@ jobs:
         run: .github/shared/ci-prerequisites.sh
 
       - name: Checkout Ecosystem
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: ${{ env.ECOSYSTEM_CI_REPO }}
           ref: ${{ inputs.ecosystem_ci_repo_branch }}
