@@ -66,13 +66,13 @@ jobs:
             -f image_name=${PAYLOAD_IMAGE_NAME} \
             -f image_tag=${PAYLOAD_IMAGE_TAG} \
             -f github_repository=${GH_REPO} \
-            -f run_id=${GH_RUN_ID}
-          
+            -f run_id=${GH_RUN_ID} \
+            -f artifact_name=${PAYLOAD_IMAGE_ARTIFACT}
+
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           GH_REPO: ${{ github.repository }}
           GH_RUN_ID: ${{ github.run_id }}
-          ARTIFACT_NAME: ${{ github.event.repository.name }}
 
       - name: Output workflow execution URL
         id: out
