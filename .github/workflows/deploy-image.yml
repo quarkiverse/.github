@@ -16,11 +16,16 @@ on:
         required: false
         type: string
         default: 'artifact'
+      additional_tags:
+        description: 'Comma-separated list of additional tags (e.g. latest,stable)'
+        required: false
+        type: string
 
 env:
   PAYLOAD_IMAGE_NAME: ${{ inputs.image_name }}
   PAYLOAD_IMAGE_TAG: ${{ inputs.image_tag }}
   PAYLOAD_IMAGE_ARTIFACT: ${{ inputs.artifact_name }}
+  PAYLOAD_ADDITIONAL_TAGS: ${{ inputs.additional_tags }}
   PAYLOAD_REPOSITORY: ${{ github.repository }}
 
 permissions:
@@ -62,12 +67,17 @@ jobs:
 
       - name: Invoke Deploy to Quay workflow
         run: |
+          ADDITIONAL_TAGS_FLAG=""
+          if [ -n "${PAYLOAD_ADDITIONAL_TAGS}" ]; then
+            ADDITIONAL_TAGS_FLAG="-f additional_tags=${PAYLOAD_ADDITIONAL_TAGS}"
+          fi
           gh workflow run deploy-quay.yml -R quarkiverse/quarkiverse-release \
             -f image_name=${PAYLOAD_IMAGE_NAME} \
             -f image_tag=${PAYLOAD_IMAGE_TAG} \
             -f github_repository=${GH_REPO} \
             -f run_id=${GH_RUN_ID} \
-            -f artifact_name=${PAYLOAD_IMAGE_ARTIFACT}
+            -f artifact_name=${PAYLOAD_IMAGE_ARTIFACT} \
+            ${ADDITIONAL_TAGS_FLAG}
 
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
