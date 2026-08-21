@@ -2,8 +2,18 @@ name: Quarkiverse Pre Release
 
 on:
   workflow_call:
+    inputs:
+      maven_executable:
+        required: false
+        description: Maven Executable
+        type: string
+      java_version:
+        required: false
+        description: Java Version
+        type: number
+        default: 21
 
-permissions: 
+permissions:
   contents: read
 
 jobs:
@@ -19,7 +29,7 @@ jobs:
           exit 1
 
       - uses: actions/checkout@v7
-      
+
       - uses: smallrye/project-metadata-action@main
         name: retrieve project metadata
         id: metadata
@@ -38,3 +48,37 @@ jobs:
         run: |
           echo '::error::${{ vars.PRE_RELEASE_ERROR }}'
           exit 1
+
+      - name: Set up JDK ${{ inputs.java_version }}
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ inputs.java_version }}
+          cache: 'maven'
+
+      - name: Detect Maven Executable
+        run: |
+          if [[ -z "${MAVEN_EXEC}" ]]; then
+            if [ -f mvnw ]; then
+              echo "MAVEN_EXEC=./mvnw" >> $GITHUB_ENV
+            else
+              echo "MAVEN_EXEC=mvn" >> $GITHUB_ENV
+            fi
+          else
+            echo "MAVEN_EXEC=${MAVEN_EXEC}" >> $GITHUB_ENV
+          fi
+        env:
+          MAVEN_EXEC: ${{ inputs.maven_executable }}
+
+      - name: Build project
+        run: $MAVEN_EXEC -B -ntp package -DskipTests -DskipITs
+
+      - name: Check for untracked files
+        run: |
+          UNTRACKED=$(git status --porcelain --untracked-files=all)
+          if [[ -n "${UNTRACKED}" ]]; then
+            echo '::error::The build produced untracked or modified files. Add them to .gitignore (or commit them) to avoid a failing release.'
+            echo "${UNTRACKED}"
+            git status --porcelain --untracked-files=all >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
