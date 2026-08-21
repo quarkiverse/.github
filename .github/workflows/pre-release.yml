@@ -11,7 +11,7 @@ on:
         required: false
         description: Java Version
         type: number
-        default: 17
+        default: 21
 
 permissions:
   contents: read
