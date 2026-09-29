@@ -26,7 +26,7 @@ on:
         required: false
         description: Skip Tests?
         type: boolean
-        default: false
+        default: true
     # Map the workflow outputs to job outputs
     outputs:
       release-version:
