@@ -27,6 +27,11 @@ on:
         description: Skip Tests?
         type: boolean
         default: true
+      runs-on:
+        description: 'The runs-on label for the job'
+        required: false
+        type: string
+        default: 'ubuntu-latest'
     # Map the workflow outputs to job outputs
     outputs:
       release-version:
@@ -41,7 +46,7 @@ permissions:
 
 jobs:
   prepare-release:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs-on }}
     name: Prepare Release
     # Map the job outputs to step outputs
     outputs:
