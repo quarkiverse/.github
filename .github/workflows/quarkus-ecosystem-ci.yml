@@ -18,9 +18,9 @@ on:
         default: "main"
       java_version:
         required: false
-        description: "Java version to use for the build, e.g. 17 or 21. By default, Java 17 will be used."
+        description: "Java version to use for the build, e.g. 17 or 21. By default, Java 21 will be used."
         type: number
-        default: 17
+        default: 21
       quarkus_version_pom_path:
         required: false
         description: "Path to the POM file where the Quarkus version is defined, relative to the repository root. By default, it's set to 'rest-fights/pom.xml'."

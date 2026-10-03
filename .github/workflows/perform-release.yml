@@ -21,7 +21,7 @@ on:
         required: false
         description: Java Version
         type: number
-        default: 17
+        default: 21
       watch_release_workflow:
         description: 'Wait for the release workflow to complete before returning'
         required: false
