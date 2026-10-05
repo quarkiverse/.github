@@ -31,6 +31,11 @@ on:
         description: 'Additional Maven arguments to pass to the release command'
         required: false
         type: string
+      runs-on:
+        description: 'The runs-on label for the job'
+        required: false
+        type: string
+        default: 'ubuntu-latest'
 
   # Can be triggered manually also
   workflow_dispatch:
@@ -75,7 +80,7 @@ jobs:
     outputs:
       release-workflow-id: ${{ steps.out.outputs.release-workflow-id }}
       release-workflow-url: ${{ steps.out.outputs.release-workflow-url }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs-on || 'ubuntu-latest' }}
     steps:
       - name: Set Dry Run Environment Variable
         run: |
