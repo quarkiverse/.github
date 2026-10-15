@@ -135,7 +135,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy release ${{env.RELEASE_VERSION}}
-        run: $MAVEN_EXEC -B deploy -DperformRelease -DaltDeploymentRepository=local::file://${{ github.workspace }}/repository -DskipTests -DskipITs -Denforcer.skip -Dformat.skip
+        run: $MAVEN_EXEC -V -B deploy -DperformRelease -DaltDeploymentRepository=local::file://${{ github.workspace }}/repository -DskipTests -DskipITs -Denforcer.skip -Dformat.skip
         env:
           MAVEN_ARGS: ${{ inputs.maven_args || github.event.inputs.maven_args }}
 

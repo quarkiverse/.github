@@ -131,14 +131,14 @@ jobs:
       - name: Update latest release version in docs
         if: ${{ hashFiles('docs/pom.xml') != '' }}
         run: |
-          $MAVEN_EXEC -B -ntp -pl docs -am package -DskipTests -DskipITs -Denforcer.skip -Dformatter.skip -Dimpsort.skip
+          $MAVEN_EXEC -V -B -ntp -pl docs -am package -DskipTests -DskipITs -Denforcer.skip -Dformatter.skip -Dimpsort.skip
           if [[ `git status --porcelain` ]]; then
             git commit -a -m "Update the latest release version ${{env.CURRENT_VERSION}} in documentation"
           fi
 
       - name: Maven release ${{env.CURRENT_VERSION}}
         run: |
-          $MAVEN_EXEC -B release:prepare -Prelease -Dgpg.skip=true -DreleaseVersion=${CURRENT_VERSION} -DdevelopmentVersion=${NEXT_VERSION} ${{ inputs.skip_tests && '-DskipTests -DskipITs' || '' }} -Darguments="-Dgpg.skip=true -DprepareRelease=true ${{ inputs.skip_tests && '-DskipTests -DskipITs' || '' }}" -DprepareRelease=true
+          $MAVEN_EXEC -V -B release:prepare -Prelease -Dgpg.skip=true -DreleaseVersion=${CURRENT_VERSION} -DdevelopmentVersion=${NEXT_VERSION} ${{ inputs.skip_tests && '-DskipTests -DskipITs' || '' }} -Darguments="-Dgpg.skip=true -DprepareRelease=true ${{ inputs.skip_tests && '-DskipTests -DskipITs' || '' }}" -DprepareRelease=true
           $MAVEN_EXEC -B release:clean
 
       - name: Invoke Post-Prepare Release Hook (if exists)
