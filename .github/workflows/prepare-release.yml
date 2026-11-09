@@ -151,8 +151,8 @@ jobs:
 
       - name: Push changes to ${{github.base_ref}} branch and tag ${{env.CURRENT_VERSION}}
         run: |
-          git push
           git push origin ${CURRENT_VERSION}
+          git push
 
       - name: Output release version
         id: out
