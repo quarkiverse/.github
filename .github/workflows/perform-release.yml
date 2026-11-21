@@ -69,6 +69,7 @@ defaults:
 
 jobs:
   perform-release:
+    if: github.repository_owner == 'quarkiverse'
     environment:
       name: Release Repository
       url: ${{ steps.out.outputs.release-workflow-url }}

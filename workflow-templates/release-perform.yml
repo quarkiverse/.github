@@ -22,6 +22,7 @@ concurrency:
 jobs:
   perform-release:
     name: Perform Release
+    if: github.repository_owner == 'quarkiverse'
     uses: quarkiverse/.github/.github/workflows/perform-release.yml@main
     secrets: inherit
     with:
