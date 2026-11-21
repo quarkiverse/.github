@@ -45,7 +45,7 @@ jobs:
     name: Prepare Release
     # Allow changing .github/project.yml (eg. next-version) without cutting a release.
     # Only honoured for pull requests: a manual workflow_dispatch always releases.
-    if: ${{ github.event_name != 'pull_request' || !contains(github.event.pull_request.body, '[skip release]') }}
+    if: ${{ github.repository_owner == 'quarkiverse' && (github.event_name != 'pull_request' || !contains(github.event.pull_request.body, '[skip release]')) }}
     # Map the job outputs to step outputs
     outputs:
       release-version: ${{ steps.out.outputs.release-version }}
